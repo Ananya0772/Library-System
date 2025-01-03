@@ -1,0 +1,51 @@
+{
+    "books": [
+        {
+            "id": 1,
+            "title": "1984",
+            "author": "George Orwell",
+            "genre": "Fiction",
+            "pub_year": 1949,
+            "available_copies": 3,
+            "isbn": "9780451524935"
+        },
+        {
+            "id": 2,
+            "title": "Sapiens: A Brief History of Humankind",
+            "author": "Yuval Noah Harari",
+            "genre": "Non-Fiction",
+            "pub_year": 2011,
+            "available_copies": 5,
+            "isbn": "9780062316097"
+        }
+    ],
+    "members": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "email": "johndoe@example.com",
+            "phone": "9876543210",
+            "membership_type": "Premium",
+            "max_books_allowed": 5
+        },
+        {
+            "id": 2,
+            "name": "Jane Smith",
+            "email": "janesmith@example.com",
+            "phone": "8765432109",
+            "membership_type": "Elite",
+            "max_books_allowed": 10
+        }
+    ],
+    "transactions": [
+        {
+            "id": 1,
+            "member": "John Doe",
+            "book": "1984",
+            "issue_date": "2024-12-30",
+            "return_date": null,
+            "status": "Issued",
+            "fine_amount": 0
+        }
+    ]
+}
