@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Members Module</h2>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Member Form -->
+<form method="POST" action="/members">
+    <label for="name">Name:</label>
+    <input type="text" name="name" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" required><br>
+
+    <label for="phone">Phone Number:</label>
+    <input type="text" name="phone" maxlength="10" required pattern="\d{10}" title="Phone number must be 10 digits"><br>
+
+    <label for="membership_start_date">Membership Start Date:</label>
+    <input type="date" name="membership_start_date" value="{{ now.strftime('%Y-%m-%d') }}" readonly><br>
+
+
+
+    <label for="membership_type">Membership Type:</label>
+    <select name="membership_type" required>
+        <option value="Basic">Basic</option>
+        <option value="Premium">Premium</option>
+        <option value="Elite">Elite</option>
+    </select><br>
+
+    <!--<label for="max_books_allowed">Max Books Allowed:</label>-->
+    <!--<input type="number" name="max_books_allowed" id="max_books_allowed" readonly><br>-->
+
+    <button type="submit">Add Member</button>
+</form>
+
+<!-- Member List -->
+<h3>Existing Members</h3>
+<ul>
+    {% for member in members %}
+        <li>Member ID: {{ member.id }} - {{ member.name }} - {{ member.membership_type }} (Max Books: {{ member.max_books_allowed }})</li>
+    {% endfor %}
+</ul>
+
+<script>
+    // JavaScript to handle auto-filling of Max Books Allowed based on Membership Type
+    document.getElementById('membership_type').addEventListener('change', function() {
+        let membershipType = this.value;
+        let maxBooksAllowed = 0;
+
+        if (membershipType === 'Basic') {
+            maxBooksAllowed = 2;
+        } else if (membershipType === 'Premium') {
+            maxBooksAllowed = 5;
+        } else if (membershipType === 'Elite') {
+            maxBooksAllowed = 10;
+        }
+
+        document.getElementById('max_books_allowed').value = maxBooksAllowed;
+    });
+
+    // Set default value for Max Books Allowed when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        let membershipType = document.getElementById('membership_type').value;
+        let maxBooksAllowed = 0;
+
+        if (membershipType === 'Basic') {
+            maxBooksAllowed = 2;
+        } else if (membershipType === 'Premium') {
+            maxBooksAllowed = 5;
+        } else if (membershipType === 'Elite') {
+            maxBooksAllowed = 10;
+        }
+
+        document.getElementById('max_books_allowed').value = maxBooksAllowed;
+    });
+</script>
+
+{% endblock %}

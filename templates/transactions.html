@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Transactions Module</h2>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Transaction Form -->
+<form method="POST" action="/transactions">
+    <label for="member">Member:</label>
+    <select name="member" required>
+        {% for member in members %}
+            <option value="{{ member.id }}">{{ member.name }}</option>
+        {% endfor %}
+    </select><br>
+
+    <label for="book">Book:</label>
+    <select name="book" required>
+        {% for book in books %}
+            <option value="{{ book.id }}">{{ book.title }} (Available: {{ book.available_copies }})</option>
+        {% endfor %}
+    </select><br>
+
+    <label for="issue_date">Issue Date:</label>
+    <input type="date" name="issue_date" value="{{ now().strftime('%Y-%m-%d') }}" required readonly><br>
+
+    <label for="return_date">Return Date:</label>
+    <input type="date" name="return_date" min="{{ now().strftime('%Y-%m-%d') }}" required><br>
+
+    <label for="status">Status:</label>
+    <select name="status" required>
+        <option value="Issued">Issued</option>
+        <option value="Returned">Returned</option>
+        <option value="Overdue">Overdue</option>
+    </select><br>
+
+    <label for="fine_amount">Fine Amount:</label>
+    <input type="number" name="fine_amount" value="0" readonly><br>
+
+    <button type="submit">Submit Transaction</button>
+</form>
+
+<!-- Transactions List -->
+<h3>Existing Transactions</h3>
+<ul>
+    {% for transaction in transactions %}
+        <li>
+            Transaction ID: {{transaction.id}} {{ transaction.member }} borrowed "{{ transaction.book }}" on {{ transaction.issue_date }} 
+            (Return Date: {{ transaction.return_date }}) - Status: {{ transaction.status }}
+            {% if transaction.status == 'Issued' %}
+                <span>(Return Pending)</span>
+            {% elif transaction.status == 'Overdue' %}
+                <span>Fine: ${{ transaction.fine_amount }}</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
